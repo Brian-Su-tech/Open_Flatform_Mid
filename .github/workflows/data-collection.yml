@@ -24,14 +24,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
         
-    - name: 執行資料收集腳本
+    - name: 執行api爬蟲
       run: |
+        echo "開始執行api爬蟲..."
         python api.py
+        echo "api爬蟲完成"
+    
+    - name: 執行static爬蟲
+      run: |
+        echo "開始執行static爬蟲..."
         python static.py
+        echo "static爬蟲完成"
         
     - name: 提交更新的資料
       run: |
         git config --global user.name "crawler-bot"
         git config --global user.email "crawler-bot@gmail.com"
         git add . && git commit -m "daily crawl"
-        git push origin main
+        git push origin main    

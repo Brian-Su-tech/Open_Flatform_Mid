@@ -31,8 +31,7 @@ jobs:
         
     - name: 提交更新的資料
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add api.csv static.csv
-        git commit -m "自動更新資料 "
-        git push 
+        git config --global user.name "crawler-bot"
+        git config --global user.email "crawler-bot@gmail.com"
+        git add . && git commit -m "daily crawl"
+        git push origin main

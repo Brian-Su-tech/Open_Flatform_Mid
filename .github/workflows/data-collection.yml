@@ -1,0 +1,38 @@
+name: 資料收集工作流程
+run-name: 資料收集
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 執行（台灣時間早上 8:00）
+  workflow_dispatch:      # 允許手動觸發
+
+jobs:
+  collect-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v2
+      
+    - name: 設定 Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        
+    - name: 安裝相依套件
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+        
+    - name: 執行資料收集腳本
+      run: |
+        python api.py
+        python static.py
+        
+    - name: 提交更新的資料
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add api.csv static.csv
+        git commit -m "自動更新資料 "
+        git push 
